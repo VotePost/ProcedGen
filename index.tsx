@@ -106,7 +106,7 @@ const App: React.FC = () => {
 		canvas.height = size * tile;
 		for (let y = 0; y < size; y++) {
 			for (let x = 0; x < size; x++) {
-				ctx.fillStyle = grid[y][x] === 1 ? "#e6d7b1" : "#2b2b2b"; // floor, wall
+				ctx.fillStyle = grid[y][x] === 1 ? "#9b7a28" : "#1a0f4e"; // floor, wall
 				ctx.fillRect(x * tile, y * tile, tile, tile);
 			}
 		}
@@ -164,7 +164,7 @@ const App: React.FC = () => {
 				</div>
 
 				<div style={{ width: 420 }}>
-					<canvas ref={canvasRef} style={{ width: "100%", border: "1px solid #ccc" }} />
+					<canvas ref={canvasRef} style={{ width: "100%", border: "1px solid #000000" }} />
 				</div>
 			</div>
 
