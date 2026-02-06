@@ -30,11 +30,21 @@ const App: React.FC = () => {
 
 	return (
 		<div className="app">
-			<h2>Horizontal Sliders</h2>
+			<h2>Procedural Generation Options</h2>
 			<div className="sliders">
-				<SliderRow label="Slider 1" value={s1} onChange={setS1} />
-				<SliderRow label="Slider 2" value={s2} onChange={setS2} />
-				<SliderRow label="Slider 3" value={s3} onChange={setS3} />
+				<SliderRow label="Amount of Caves" value={s1} onChange={setS1} />
+				<SliderRow label="Amount of Hills" value={s2} onChange={setS2} />
+				<SliderRow label="Amount of Rivers" value={s3} onChange={setS3} />
+			</div>
+			<div className="checkboxes">
+				<label className="checkbox-label">
+					<input type="checkbox" defaultChecked />
+					<span className="checkbox-text">Use Water</span>
+				</label>
+			</div>
+			<div className="options">
+				<button onClick={() => alert(`Generating with:\nCaves: ${s1}\nHills: ${s2}\nRivers: ${s3}`)}>Generate</button>
+				<button onClick={() => { setS1(50); setS2(25); setS3(75); }}>Reset</button>
 			</div>
 
 			<style>{`
