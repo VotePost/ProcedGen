@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "procedural-generation",
   "version": "0.0.0",
   "private": true,
@@ -8,14 +8,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "groq-sdk": "^0.37.0",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "groq-sdk": "^0.37.0"
+    "react-dom": "^19.2.4"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
     "@types/react": "^19.2.13",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "typescript": "^5.9.3",
     "vite": "^7.3.1"
   }
 }
