@@ -42,6 +42,7 @@ function generateDungeon(
 		roomMaxSize: number,
 		doorCount: number,
 		keyCount: number,
+		enemyCount: number,
 		lightLevel: number,
 		seed: number
 ): { grid: Grid; rooms: { x: number; y: number; w: number; h: number }[]; metadata: any } {
@@ -110,6 +111,7 @@ const App: React.FC = () => {
 	const [roomMaxSize, setRoomMaxSize] = useState(8);
 	const [doorCount, setDoorCount] = useState(4);
 	const [keyCount, setKeyCount] = useState(1);
+	const [enemyCount, setEnemyCount] = useState(0);
 	const [lightLevel, setLightLevel] = useState(50); // 1=darkest,100=bright
 	const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1000000));
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -128,6 +130,7 @@ const App: React.FC = () => {
 			roomMaxSize,
 			doorCount,
 			keyCount,
+			enemyCount,
 			lightLevel,
 			s
 		);
@@ -180,7 +183,7 @@ const App: React.FC = () => {
 	useEffect(() => {
 		regen();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [gridSize, roomCount, roomMaxSize, doorCount, keyCount, lightLevel]);
+	}, [gridSize, roomCount, roomMaxSize, doorCount, keyCount, enemyCount, lightLevel]);
 
 	function randomize() {
 		const s = Math.floor(Math.random() * 1000000);
@@ -321,7 +324,7 @@ const App: React.FC = () => {
 		if (!lastGrid) return;
 		const payload = {
 			grid: lastGrid,
-			params: { gridSize, roomCount, roomMaxSize, doorCount, keyCount, lightLevel, seed },
+			params: { gridSize, roomCount, roomMaxSize, doorCount, keyCount, enemyCount, lightLevel, seed },
 		};
 		const json = JSON.stringify(payload);
 		try {
