@@ -189,6 +189,33 @@ const App: React.FC = () => {
         regen(s);
     }
 
+    function exportJson() {
+        if (!lastGrid) return;
+        const data = JSON.stringify({ 
+            prompt: prompt || "Manual Generation",
+            parameters: {
+                gridSize,
+                roomCount,
+                roomMaxSize,
+                doorCount,
+                keyCount,
+                enemyCount,
+                hazardCount,
+                lightLevel
+            },
+            seed: seed,
+            grid: lastGrid 
+        }, null, 2);
+        
+        const blob = new Blob([data], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `dungeon-${seed}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
     async function callGroq(promptText: string): Promise<string> {
         const key = (import.meta as any).env.VITE_GROQ_API_KEY;
         if (!key) throw new Error("GROQ API key is missing (set VITE_GROQ_API_KEY in .env)");
@@ -312,6 +339,7 @@ const App: React.FC = () => {
                                 </div>
                                 <div className="button-group">
                                     <button onClick={randomize}>Randomize</button>
+                                    <button onClick={exportJson}>Export JSON</button>
                                 </div>
                             </div>
                             <div className="main-content">
