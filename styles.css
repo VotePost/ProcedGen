@@ -159,6 +159,7 @@ button:disabled {
 .canvas-section {
   flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #1a1a2e;
@@ -166,6 +167,7 @@ button:disabled {
   border: 1px solid #333;
   padding: 20px;
   min-height: 0;
+  gap: 20px;
 }
 
 canvas {
@@ -174,6 +176,46 @@ canvas {
   image-rendering: pixelated;
   border: 1px solid #555;
   border-radius: 4px;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #e0e0e0;
+}
+
+.legend h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.legend-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.color-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  border: 1px solid #555;
 }
 
 .llm-section {

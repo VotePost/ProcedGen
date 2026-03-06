@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 
-type Grid = number[][]; // 0=wall, 1=floor, 2=door, 3=key, 4=enemy, 5=hazard
+type Grid = number[][]; // 0=wall, 1=floor, 2=door, 3=key, 4=weak enemy, 5=hazard, 6=medium enemy, 7=strong enemy
 
 function mulberry32(a: number) {
     return function () {
@@ -103,7 +103,42 @@ function generateDungeon(
     
     placeObjects(doorCount, 2);
     placeObjects(keyCount, 3);
-    placeObjects(enemyCount, 4);
+    
+    // Collect door positions
+    const doorPositions: { x: number; y: number }[] = [];
+    for (let y = 0; y < gridSize; y++) {
+        for (let x = 0; x < gridSize; x++) {
+            if (grid[y][x] === 2) {
+                doorPositions.push({ x, y });
+            }
+        }
+    }
+    
+    // Place enemies with levels based on distance to nearest door
+    function placeEnemies(count: number) {
+        let placed = 0;
+        let attempts = 0;
+        while (placed < count && attempts < count * 10) {
+            const i = Math.floor(rand() * gridSize);
+            const j = Math.floor(rand() * gridSize);
+            if (grid[j][i] === 1) {
+                // Calculate min Euclidean distance to any door
+                let minDist = Infinity;
+                for (const door of doorPositions) {
+                    const dist = Math.sqrt((i - door.x) ** 2 + (j - door.y) ** 2);
+                    if (dist < minDist) minDist = dist;
+                }
+                let enemyLevel = 4; // weak
+                if (minDist < 5) enemyLevel = 7; // strong
+                else if (minDist < 10) enemyLevel = 6; // medium
+                grid[j][i] = enemyLevel;
+                placed++;
+            }
+            attempts++;
+        }
+    }
+    
+    placeEnemies(enemyCount);
     placeObjects(hazardCount, 5);
 
     return { grid, rooms, metadata: { lightLevel } };
@@ -168,8 +203,10 @@ const App: React.FC = () => {
                     case 1: color = "#9b7a28"; break; // floor
                     case 2: color = "#663300"; break; // door
                     case 3: color = "#ffff00"; break; // key
-                    case 4: color = "#ff0000"; break; // enemy
+                    case 4: color = "#ff0000"; break; // weak enemy
                     case 5: color = "#00aaff"; break; // hazard/water
+                    case 6: color = "#ff6600"; break; // medium enemy
+                    case 7: color = "#990000"; break; // strong enemy
                     default: color = "#ff00ff";
                 }
                 ctx.fillStyle = color;
@@ -345,6 +382,44 @@ const App: React.FC = () => {
                             <div className="main-content">
                                 <div className="canvas-section">
                                     <canvas ref={canvasRef} />
+                                    <div className="legend">
+                                        <h3>Key</h3>
+                                        <div className="legend-items">
+                                            <div className="legend-item">
+                                                <div className="color-box" style={{ backgroundColor: "#1a0f4e" }}></div>
+                                                <span>Wall</span>
+                                            </div>
+                                            <div className="legend-item">
+                                                <div className="color-box" style={{ backgroundColor: "#9b7a28" }}></div>
+                                                <span>Floor</span>
+                                            </div>
+                                            <div className="legend-item">
+                                                <div className="color-box" style={{ backgroundColor: "#663300" }}></div>
+                                                <span>Door</span>
+                                            </div>
+                                            <div className="legend-item">
+                                                <div className="color-box" style={{ backgroundColor: "#ffff00" }}></div>
+                                                <span>Key</span>
+                                            </div>
+                                               <div className="legend-item">
+                                                <div className="color-box" style={{ backgroundColor: "#00aaff" }}></div>
+                                                <span>Hazard</span>
+                                            </div>
+                                            <div className="legend-item">
+                                                <div className="color-box" style={{ backgroundColor: "#ff0000" }}></div>
+                                                <span>Weak Enemy</span>
+                                            </div>
+                                         
+                                            <div className="legend-item">
+                                                <div className="color-box" style={{ backgroundColor: "#ff6600" }}></div>
+                                                <span>Medium Enemy</span>
+                                            </div>
+                                            <div className="legend-item">
+                                                <div className="color-box" style={{ backgroundColor: "#990000" }}></div>
+                                                <span>Strong Enemy</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="llm-section">
                                     <h2>Generate with AI</h2>
